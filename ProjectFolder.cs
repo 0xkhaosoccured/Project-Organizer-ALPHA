@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,10 +11,10 @@ namespace Folders
   public class ProjectFolder
   {
     public required string Path { get; set; }
-    public List<string> Hashtags { get; set; }
+    public ObservableCollection<string> Hashtags { get; set; }
     public ProjectFolder()
     {
-      Hashtags = new List<string>();
+      Hashtags = new ObservableCollection<string>();
     }
 
     public bool AddHashtag(string tag)

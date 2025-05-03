@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Project_Organizer_ALPHA"
         mc:Ignorable="d"
-        Title="SHIIVA Project Organizer v0.0.1" Height="768" Width="1366" ResizeMode="NoResize"  Background="#060211">
+        Title="SHIIVA Project Organizer v0.0.2" Height="768" Width="1366" ResizeMode="NoResize"  Background="#060211">
 
     <Window.Resources>
         <Style TargetType="ListView">
@@ -19,14 +19,36 @@
             <Setter Property="FontSize" Value="14"/>
         </Style>
     </Window.Resources>
-    <Grid>
-        <ListView x:Name="foldersListView" ItemsSource="{Binding project_folders}" Background="Black" Margin="140,10,140,117" MouseDoubleClick="folderListView_DoubleClick">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Путь к папке" DisplayMemberBinding="{Binding Path}"/>
-                </GridView>
-            </ListView.View>
-        </ListView>
+    <Grid PreviewMouseLeftButtonDown="Grid_PreviewMouseLeftButtonDown">
+        <Grid>
+            <ListView x:Name="foldersListView" ItemsSource="{Binding project_folders}"  Background="Black" Margin="140,10,140,117" MouseDoubleClick="foldersListView_MouseDoubleClick">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Путь к папке" DisplayMemberBinding="{Binding Path}" Width="500"/>
+                        <GridViewColumn Header="Хештеги" Width="500">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ItemsControl ItemsSource="{Binding Hashtags}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Background="#FF4081" CornerRadius="3" Padding="7,3" Margin="3">
+                                                    <TextBlock Text="{Binding}" Foreground="White" FontWeight="SemiBold" FontSize="12"/>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Orientation="Horizontal"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                    </ItemsControl>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Grid>
         <Button Content="Add Folder" HorizontalAlignment="Center" Margin="0,684,0,0" VerticalAlignment="Top" Height="31" Width="110" Click="Button_Click"/>
         <TextBox x:Name="PathInfo" HorizontalAlignment="Left" Margin="584,649,0,0" TextWrapping="Wrap" Text="Path" VerticalAlignment="Top" Width="120"/>
         <Button Content="Remove" HorizontalAlignment="Left" Margin="795,657,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Height="36" Width="114" Click="Button_Click_1">

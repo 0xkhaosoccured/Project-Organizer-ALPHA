@@ -1,15 +1,19 @@
-﻿using System.Collections.ObjectModel; 
-using System.Windows;
+﻿using Microsoft.Win32;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
-using Pjf = Folders.ProjectFolder;
-using Path = System.IO.Path;
-using Microsoft.Win32;
+using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
+using fs = Filesystem.Filemanipulation;
+using Path = System.IO.Path;
+using Pjf = Folders.ProjectFolder;
 
 namespace Project_Organizer_ALPHA
 {
   public partial class MainWindow : Window
   {
+    fs filesystem = new fs();
     public ObservableCollection<Pjf> project_folders { get; set; }
     public MainWindow()
     {
@@ -63,75 +67,42 @@ namespace Project_Organizer_ALPHA
       if(foldersListView.SelectedItems != null) {
         List<Pjf> items_to_pack = foldersListView.SelectedItems.Cast<Pjf>().ToList();
         foreach(Pjf item in items_to_pack) {
-          Repack(item.Path);
+          filesystem.Repack(item.Path);
         }
       }
     }
 
     private void foldersListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
-
-    }
-
-    private void Repack(string path)
-    {
-      (string sub, string footages) = CreateSubFold(path);
-      if (!string.IsNullOrEmpty(sub)) {
-        if (!string.IsNullOrEmpty(footages)) {
-          try 
-          {
-            string[] filesInPath = Directory.GetFiles(path);
-            foreach (string file in filesInPath) 
-            {
-              if (Path.GetExtension(file) == ".aep") {
-                string filename = Path.GetFileName(file);
-                string _dirname = Path.Combine(sub, filename);
-                File.Move(file, _dirname);
-              }
-              else {
-                string filename = Path.GetFileName(file);
-                string _dirname = Path.Combine(footages, filename);
-                File.Move(file, _dirname);
-              }
-            }
-            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo() {
-              FileName = sub,
-              UseShellExecute = true,
-              Verb = "open" 
-            });
-          }
-          catch (Exception ex) 
-          {
-            // TODO
-            MessageBox.Show($"Error in repack function: {ex.Message}");
-          }
-        }  
-      }
-    }
-
-    
-    private (string subfolder, string footage_folder) CreateSubFold(string path)
-    {
-      string path_name = Path.GetFileName(path);
-      string subfolder = Path.Combine(path, path_name);
-      string footage_folder = Path.Combine(subfolder, "(Footage)");
-      if (Directory.Exists(path)) {
-        if (!string.IsNullOrEmpty(path_name)) {
-          try {
-            Directory.CreateDirectory(subfolder);
-            Directory.CreateDirectory(footage_folder);
-          }
-          catch (Exception ex) {
-            MessageBox.Show($"Не удалось создать папку: {ex.Message}");
-          }
-        } else {
-          MessageBox.Show("Paths are empty");
+      if(foldersListView.SelectedItem != null) {
+        Pjf selected_folder = foldersListView.SelectedItem as Pjf;
+        if (selected_folder != null) {
+          HashtagsEditor hse = new HashtagsEditor();
+          hse._FolderToEdit = selected_folder;
+          hse.ShowDialog();
         }
       }
-      else {
-        MessageBox.Show("Directory is not exist");
+    }
+
+    private void Grid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+      Debug.WriteLine("Клик по Grid сработал!"); 
+      DependencyObject clickedElement = e.OriginalSource as DependencyObject;
+
+      bool clickedInsideListViewItem = false;
+      while (clickedElement != null && clickedElement != foldersListView)
+      {
+        if (clickedElement is System.Windows.Controls.ListViewItem) {
+          clickedInsideListViewItem = true;
+          break; 
+        }
+        clickedElement = VisualTreeHelper.GetParent(clickedElement);
       }
-      return (subfolder, footage_folder);
+
+      if (!clickedInsideListViewItem && foldersListView.SelectedItem != null) {
+        Debug.WriteLine("Клик вне ячейки таблицы. Снятие выделения..."); 
+        foldersListView.SelectedItem = null; 
+      }
     }
   }
 }
