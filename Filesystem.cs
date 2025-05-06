@@ -1,32 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using System.Windows.Forms;
+
+/// <summary>
+/// This .cs file contains all useful methods for working with files
+/// </summary>
 
 namespace Filesystem
 {
   class Filemanipulation
   {
-    public void Repack(string path)
+    public void Bundle(string path)
     {
       (string sub, string footages) = CreateSubFold(path);
       if (!string.IsNullOrEmpty(sub)) {
         if (!string.IsNullOrEmpty(footages)) {
           try {
             string[] filesInPath = Directory.GetFiles(path);
-            foreach (string file in filesInPath) 
-            {
-              if (Path.GetExtension(file) == ".aep") 
-              {
+            foreach (string file in filesInPath) {
+              if (Path.GetExtension(file) == ".aep") {
                 string filename = Path.GetFileName(file);
                 string _dirname = Path.Combine(sub, filename);
                 File.Move(file, _dirname);
               }
-              else 
-              {
+              else {
                 string filename = Path.GetFileName(file);
                 string _dirname = Path.Combine(footages, filename);
                 File.Move(file, _dirname);
@@ -39,7 +35,6 @@ namespace Filesystem
             });
           }
           catch (Exception ex) {
-            // TODO
             MessageBox.Show($"Error in repack function: {ex.Message}");
           }
         }
@@ -59,15 +54,15 @@ namespace Filesystem
             Directory.CreateDirectory(footage_folder);
           }
           catch (Exception ex) {
-            MessageBox.Show($"Не удалось создать папку: {ex.Message}");
+            MessageBox.Show($"Error while creating a folder: {ex.Message}");
           }
         }
         else {
-          MessageBox.Show("Paths are empty");
+          MessageBox.Show("Paths are empty.");
         }
       }
       else {
-        MessageBox.Show("Directory is not exist");
+        MessageBox.Show("Directory is not exist.");
       }
       return (subfolder, footage_folder);
     }

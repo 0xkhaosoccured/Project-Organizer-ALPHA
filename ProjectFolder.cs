@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 using System.Windows;
+
+/// <summary>
+/// This .cs file contains class about folder
+/// </summary>
 
 namespace Folders
 {
@@ -21,19 +20,19 @@ namespace Folders
     {
       const int MAX_HASHTAGS = 5;
 
-      if(!string.IsNullOrEmpty(tag)) {
-        string cleanedHashtag = tag.Trim().ToLower(); // Приводим к норм состоянию, без пробелов и прочего кала
+      if (!string.IsNullOrEmpty(tag)) {
+        string cleanedHashtag = tag.Trim().ToLower();
         if (cleanedHashtag.StartsWith("#")) {
           cleanedHashtag = cleanedHashtag.Substring(1);
         }
         if (!string.IsNullOrWhiteSpace(cleanedHashtag)) {
           if (Hashtags.Count >= MAX_HASHTAGS) {
-            MessageBox.Show($"Для папки '{System.IO.Path.GetFileName(this.Path)}' достигнут максимум хештегов ({MAX_HASHTAGS}).",
-              "Превышен лимит хештегов", MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
+            MessageBox.Show($"Для папки '{System.IO.Path.GetFileName(this.Path)}' already max hashtags count -- ({MAX_HASHTAGS}).",
+              "Too much hashtags", MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
           }
           else {
             if (Hashtags.Contains(cleanedHashtag)) {
-              MessageBox.Show($"Хештег {cleanedHashtag} уже имеется.");
+              MessageBox.Show($"Tag '{cleanedHashtag}' already here.");
               return false;
             }
             else {

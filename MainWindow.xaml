@@ -19,9 +19,9 @@
             <Setter Property="FontSize" Value="14"/>
         </Style>
     </Window.Resources>
-    <Grid PreviewMouseLeftButtonDown="Grid_PreviewMouseLeftButtonDown">
+    <Grid PreviewMouseLeftButtonDown="ResetOutline">
         <Grid>
-            <ListView x:Name="foldersListView" ItemsSource="{Binding project_folders}"  Background="Black" Margin="140,10,140,117" MouseDoubleClick="foldersListView_MouseDoubleClick">
+            <ListView x:Name="foldersListView" ItemsSource="{Binding project_folders}"  Background="Black" Margin="140,10,140,117" MouseDoubleClick="HashtagsEditing">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Путь к папке" DisplayMemberBinding="{Binding Path}" Width="500"/>
@@ -49,9 +49,9 @@
                 </ListView.View>
             </ListView>
         </Grid>
-        <Button Content="Add Folder" HorizontalAlignment="Center" Margin="0,684,0,0" VerticalAlignment="Top" Height="31" Width="110" Click="Button_Click"/>
+        <Button Content="Add Folder" HorizontalAlignment="Center" Margin="0,684,0,0" VerticalAlignment="Top" Height="31" Width="110" Click="AllocateFolder"/>
         <TextBox x:Name="PathInfo" HorizontalAlignment="Left" Margin="584,649,0,0" TextWrapping="Wrap" Text="Path" VerticalAlignment="Top" Width="120"/>
-        <Button Content="Remove" HorizontalAlignment="Left" Margin="795,657,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Height="36" Width="114" Click="Button_Click_1">
+        <Button Content="Remove" HorizontalAlignment="Left" Margin="795,657,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Height="36" Width="114" Click="RemoveFunction">
             <Button.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -61,7 +61,7 @@
                 </TransformGroup>
             </Button.RenderTransform>
         </Button>
-        <Button Content="Repack" HorizontalAlignment="Left" Margin="277,664,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.568,-0.324" Height="31" Width="148" Click="Button_Click_2"/>
+        <Button Content="Repack" HorizontalAlignment="Left" Margin="277,664,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.568,-0.324" Height="31" Width="148" Click="Finalize"/>
 
     </Grid>
 </Window>

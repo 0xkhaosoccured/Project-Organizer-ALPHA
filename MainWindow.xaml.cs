@@ -1,12 +1,9 @@
 ﻿using Microsoft.Win32;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using fs = Filesystem.Filemanipulation;
-using Path = System.IO.Path;
 using Pjf = Folders.ProjectFolder;
 
 namespace Project_Organizer_ALPHA
@@ -22,7 +19,7 @@ namespace Project_Organizer_ALPHA
       this.DataContext = this;
     }
 
-    private void Button_Click(object sender, RoutedEventArgs e)
+    private void AllocateFolder(object sender, RoutedEventArgs e)
     {
       OpenFolderDialog openFolderDialog = new OpenFolderDialog();
       openFolderDialog.Title = "Choose folder";
@@ -33,16 +30,16 @@ namespace Project_Organizer_ALPHA
         PathInfo.Text = "";
       }
       else {
-        MessageBox.Show("Failed to get PATH to your folder");
+        MessageBox.Show("Failed to get path to your folder!");
       }
     }
 
-    private void Button_Click_1(object sender, RoutedEventArgs e)
+    private void RemoveFunction(object sender, RoutedEventArgs e)
     {
-      if(foldersListView.SelectedItems != null) {
-        if(foldersListView.SelectedItems.Count > 0) {
+      if (foldersListView.SelectedItems != null) {
+        if (foldersListView.SelectedItems.Count > 0) {
           List<Pjf> items_to_remove = foldersListView.SelectedItems.Cast<Pjf>().ToList();
-          
+
           MessageBoxButton btn = MessageBoxButton.YesNo;
           MessageBoxImage icon = MessageBoxImage.Question;
           MessageBoxResult result = MessageBox.Show("Delete Folder", "Do you want to delete this folders?", btn, icon);
@@ -58,24 +55,24 @@ namespace Project_Organizer_ALPHA
         }
       }
       else {
-        MessageBox.Show("Пожалуйста, выберите папки для удаления.", "Ничего не выбрано");
-      }  
+        MessageBox.Show("Please, choose folder", "Nothing is selected.");
+      }
     }
 
-    private void Button_Click_2(object sender, RoutedEventArgs e)
+    private void Finalize(object sender, RoutedEventArgs e)
     {
-      if(foldersListView.SelectedItems != null) {
+      if (foldersListView.SelectedItems != null) {
         List<Pjf> items_to_pack = foldersListView.SelectedItems.Cast<Pjf>().ToList();
-        foreach(Pjf item in items_to_pack) {
-          filesystem.Repack(item.Path);
+        foreach (Pjf item in items_to_pack) {
+          filesystem.Bundle(item.Path);
         }
       }
     }
 
-    private void foldersListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    private void HashtagsEditing(object sender, MouseButtonEventArgs e)
     {
-      if(foldersListView.SelectedItem != null) {
-        Pjf selected_folder = foldersListView.SelectedItem as Pjf;
+      if (foldersListView.SelectedItem != null) {
+        Pjf? selected_folder = foldersListView.SelectedItem as Pjf;
         if (selected_folder != null) {
           HashtagsEditor hse = new HashtagsEditor();
           hse._FolderToEdit = selected_folder;
@@ -84,24 +81,27 @@ namespace Project_Organizer_ALPHA
       }
     }
 
-    private void Grid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    ///<summary>
+    /// Смотрим, куда был сделан клик, после чего от меньшего к большему идём и проверяем 
+    /// Является ли элемент строчкой таблицы, если не является, то 
+    /// Обнуляем наведение 
+    ///</summary>
+
+    private void ResetOutline(object sender, MouseButtonEventArgs e)
     {
-      Debug.WriteLine("Клик по Grid сработал!"); 
-      DependencyObject clickedElement = e.OriginalSource as DependencyObject;
+      DependencyObject? clickedElement = e.OriginalSource as DependencyObject;
 
       bool clickedInsideListViewItem = false;
-      while (clickedElement != null && clickedElement != foldersListView)
-      {
+      while (clickedElement != null && clickedElement != foldersListView) {
         if (clickedElement is System.Windows.Controls.ListViewItem) {
           clickedInsideListViewItem = true;
-          break; 
+          break;
         }
         clickedElement = VisualTreeHelper.GetParent(clickedElement);
       }
 
       if (!clickedInsideListViewItem && foldersListView.SelectedItem != null) {
-        Debug.WriteLine("Клик вне ячейки таблицы. Снятие выделения..."); 
-        foldersListView.SelectedItem = null; 
+        foldersListView.SelectedItem = null;
       }
     }
   }
