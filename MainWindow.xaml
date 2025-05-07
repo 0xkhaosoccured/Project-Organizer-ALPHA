@@ -19,9 +19,9 @@
             <Setter Property="FontSize" Value="14"/>
         </Style>
     </Window.Resources>
-    <Grid PreviewMouseLeftButtonDown="ResetOutline">
+    <Grid>
         <Grid>
-            <ListView x:Name="foldersListView" ItemsSource="{Binding project_folders}"  Background="Black" Margin="140,10,140,117" MouseDoubleClick="HashtagsEditing">
+            <ListView x:Name="foldersListView" ItemsSource="{Binding project_folders}"  Background="Black" Margin="270,10,10,117" MouseDoubleClick="HashtagsEditing">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Путь к папке" DisplayMemberBinding="{Binding Path}" Width="500"/>
@@ -51,15 +51,19 @@
         </Grid>
         <Button Content="Add Folder" HorizontalAlignment="Center" Margin="0,684,0,0" VerticalAlignment="Top" Height="31" Width="110" Click="AllocateFolder"/>
         <TextBox x:Name="PathInfo" HorizontalAlignment="Left" Margin="584,649,0,0" TextWrapping="Wrap" Text="Path" VerticalAlignment="Top" Width="120"/>
-        <Button Content="Remove" HorizontalAlignment="Left" Margin="795,657,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Height="36" Width="114" Click="RemoveFunction">
+        <Button Content="Remove"  HorizontalAlignment="Left" Margin="1056,651,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.587,0.334" Height="57" Width="300" Click="RemoveFunction">
             <Button.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
                     <SkewTransform/>
-                    <RotateTransform Angle="-1.48"/>
                     <TranslateTransform/>
                 </TransformGroup>
             </Button.RenderTransform>
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border CornerRadius="10" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}"></Border>
+                </ControlTemplate>
+            </Button.Template>
         </Button>
         <Button Content="Repack" HorizontalAlignment="Left" Margin="277,664,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.568,-0.324" Height="31" Width="148" Click="Finalize"/>
 
